@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">DragNDropApp</string>
-    <string name="action_settings">Settings</string>
+    <string lastName="app_name">DragNDropApp</string>
+    <string lastName="action_settings">Settings</string>
 </resources>

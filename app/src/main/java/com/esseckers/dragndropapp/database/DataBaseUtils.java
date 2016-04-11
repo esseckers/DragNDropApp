@@ -1,45 +1,56 @@
 package com.esseckers.dragndropapp.database;
 
-import android.content.ContentValues;
-import android.database.Cursor;
+import android.content.UriMatcher;
+import android.net.Uri;
 
-import com.esseckers.dragndropapp.model.ContactModel;
-
+/**
+ * Created by Ivan Danilov on 11.04.2016.
+ * Email: esseckers@gmail.com
+ */
 public class DataBaseUtils {
-    /**
-     * static SQLite commands
-     */
-    public static final String CREATE = " CREATE TABLE IF NOT EXISTS ";
 
-    /**
-     * Table names constants
-     */
-    public static final String CONTACTS_TABLE = "contacts_table";
+    //fields
+    public static final String ACTOR_ID = "id";
+    public static final String ACTOR_NAME = "name";
 
-    /**
-     * Table columns name
-     */
-    //universal colums
-    public static final String ID = "id";
-    //contacts columns
-    public static final String PHOTO_URL = "url";
-    public static final String NAME = "name";
+    static final String DB_NAME = "actors_db";
+    static final int DB_VERSION = 1;
+    static final String ACTORS_TABLE = "actors";
+    static final String DB_CREATE = "create table " + ACTORS_TABLE + "("
+            + ACTOR_ID + " integer primary key autoincrement, "
+            + ACTOR_NAME + " text );";
 
-    public static final String DROP_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS ";
+    // authority
+    static final String AUTHORITY = "com.esseckers.dragndropapp";
 
-    static ContentValues getCV(ContactModel contactModel) {
-        ContentValues cv = new ContentValues();
-        cv.put(ID, contactModel.getId());
-        cv.put(NAME, contactModel.getName());
-        cv.put(PHOTO_URL, contactModel.getPhotoUrl());
-        return cv;
-    }
+    // path
+    static final String ACTORS_PATH = "actors";
 
-    static ContactModel parseContactModelCursor(Cursor cursor) {
-        ContactModel resource = new ContactModel();
-        resource.setId(cursor.getString(cursor.getColumnIndex(ID)));
-        resource.setName(cursor.getString(cursor.getColumnIndex(NAME)));
-        resource.setPhotoUrl(cursor.getString(cursor.getColumnIndex(PHOTO_URL)));
-        return resource;
+    // general Uri
+    public static final Uri ACTOR_CONTENT_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + ACTORS_PATH);
+
+    // data types
+    // lines
+    static final String ACTOR_CONTENT_TYPE = "vnd.android.cursor.dir/vnd."
+            + AUTHORITY + "." + ACTORS_PATH;
+
+    // line
+    static final String ACTOR_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd."
+            + AUTHORITY + "." + ACTORS_PATH;
+
+    // UriMatcher
+    // general Uri
+    static final int URI_ACTORS = 1;
+
+    // Uri with specified ID
+    static final int URI_ACTOR_ID = 2;
+
+    static final UriMatcher uriMatcher;
+
+    static {
+        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        uriMatcher.addURI(AUTHORITY, ACTORS_PATH, URI_ACTORS);
+        uriMatcher.addURI(AUTHORITY, ACTORS_PATH + "/#", URI_ACTOR_ID);
     }
 }
