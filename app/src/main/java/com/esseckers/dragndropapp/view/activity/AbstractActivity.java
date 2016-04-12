@@ -22,6 +22,5 @@ public class AbstractActivity extends AppCompatActivity {
     }
 
     protected void initView() {
-
     }
 }
