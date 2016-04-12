@@ -5,8 +5,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.esseckers.dragndropapp.R;
 import com.esseckers.dragndropapp.controller.DataManager;
-import com.esseckers.dragndropapp.linkedlist.Actor;
-import com.esseckers.dragndropapp.linkedlist.ActorsLinkedList;
 import com.esseckers.dragndropapp.view.adapter.DraggableAdapter;
 import com.esseckers.dragndropapp.view.event.DragOnDropListener;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
@@ -43,12 +41,8 @@ public class MainActivity extends AbstractActivity {
             @Override
             public void onItemDragFinished(int fromPosition, int toPosition, boolean result) {
                 if (fromPosition != toPosition) {
-                    ActorsLinkedList linkedList = adapter.getData();
-                    Actor actor1 = linkedList.get(fromPosition);
-                    actor1.setId(fromPosition);
-                    Actor actor2 = linkedList.get(toPosition);
-                    actor2.setId(toPosition);
-                    DataManager.sort(getContentResolver(), actor1, actor2);
+                    DataManager.update(getContentResolver(),
+                            adapter.getData());
                 }
             }
         });

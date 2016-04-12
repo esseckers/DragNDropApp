@@ -85,6 +85,10 @@ public class ActorsLinkedList {
         return null;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     private static final class Node {
         Actor data;
 
@@ -95,9 +99,5 @@ public class ActorsLinkedList {
             previous = p;
             next = n;
         }
-    }
-
-    public int getSize() {
-        return size;
     }
 }

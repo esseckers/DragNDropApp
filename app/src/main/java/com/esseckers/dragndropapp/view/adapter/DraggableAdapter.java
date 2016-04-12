@@ -41,9 +41,8 @@ public class DraggableAdapter extends RecyclerView.Adapter<DraggableAdapter.Hold
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        final View v = inflater.inflate((viewType == 0) ? R.layout.draggable_list_item :
-                R.layout.draggable_list_item2, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate((viewType == 0) ?
+                R.layout.draggable_list_item : R.layout.draggable_list_item2, parent, false);
         return new Holder(v);
     }
 
@@ -57,10 +56,10 @@ public class DraggableAdapter extends RecyclerView.Adapter<DraggableAdapter.Hold
             if ((dragState & Draggable.STATE_FLAG_IS_ACTIVE) != 0) {
                 bgResId = R.drawable.bg_item_dragging_active_state;
                 Utils.clearState(holder.mContainer.getForeground());
-            } else if ((dragState & Draggable.STATE_FLAG_DRAGGING) != 0) {
-                bgResId = R.drawable.bg_item_dragging_state;
             } else {
-                bgResId = R.drawable.bg_item_normal_state;
+                bgResId = (dragState & Draggable.STATE_FLAG_DRAGGING) != 0
+                        ? R.drawable.bg_item_dragging_state
+                        : R.drawable.bg_item_normal_state;
             }
             holder.mContainer.setBackgroundResource(bgResId);
         }
@@ -81,14 +80,11 @@ public class DraggableAdapter extends RecyclerView.Adapter<DraggableAdapter.Hold
 
     @Override
     public boolean onCheckCanStartDrag(Holder holder, int position, int x, int y) {
-        final View containerView = holder.mContainer;
-        final View dragHandleView = holder.mDragHandle;
-
-        final int offsetX = containerView.getLeft() +
-                (int) (ViewCompat.getTranslationX(containerView) + 0.5f);
-        final int offsetY = containerView.getTop() +
-                (int) (ViewCompat.getTranslationY(containerView) + 0.5f);
-        return Utils.hitTest(dragHandleView, x - offsetX, y - offsetY);
+        View containerView = holder.mContainer;
+        return Utils.hitTest(holder.mDragHandle, x - containerView.getLeft() +
+                        (int) (ViewCompat.getTranslationX(containerView) + 0.5f),
+                y - containerView.getTop() +
+                        (int) (ViewCompat.getTranslationY(containerView) + 0.5f));
     }
 
     @Override

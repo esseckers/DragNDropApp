@@ -34,14 +34,12 @@ public class DataManager {
         return actorsLinkedList;
     }
 
-    public static void sort(ContentResolver resolver, Actor actor1, Actor actor2) {
-        ContentValues cv1 = new ContentValues();
-        cv1.put(DataBaseUtils.ACTOR_NAME, actor1.getName());
-        Uri uri1 = ContentUris.withAppendedId(DataBaseUtils.ACTOR_CONTENT_URI, actor1.getId() + 1);
-        ContentValues cv2 = new ContentValues();
-        cv2.put(DataBaseUtils.ACTOR_NAME, actor2.getName());
-        Uri uri2 = ContentUris.withAppendedId(DataBaseUtils.ACTOR_CONTENT_URI, actor2.getId() + 1);
-        resolver.update(uri1, cv1, null, null);
-        resolver.update(uri2, cv2, null, null);
+    public static void update(ContentResolver resolver, ActorsLinkedList list) {
+        for (int i = 0; i < list.getSize(); i++) {
+            ContentValues cv = new ContentValues();
+            cv.put(DataBaseUtils.ACTOR_NAME, list.get(i).getName());
+            Uri uri = ContentUris.withAppendedId(DataBaseUtils.ACTOR_CONTENT_URI, i + 1);
+            resolver.update(uri, cv, null, null);
+        }
     }
 }
